@@ -21,7 +21,7 @@ class FakeSTT:
 
 class TTS:
 	def speak(self, text):
-		pass
+		print(text)
 
 
 
@@ -87,7 +87,7 @@ while start_wakeword:
 		elif flag == '--weather':
 			desc, ct, ch = self.weather()
 			self.fr = f"{desc}, Temperature feels like {ct} Celcius, humidity is {ch}"
-			print(self.fr)
+			tts.speak(self.fr)
 
 
 		elif flag == '--memorize':
@@ -96,19 +96,25 @@ while start_wakeword:
 			ans = mem.read_from_db(question)
 
 			if not ans:
-				_asser = input(f" i dont know, can you tell me about it or shall i search on google? > ")
+			    tts.speak(f" i dont know, can you tell me about it or shall i search on google?")
+				_asser = input('> ')
 				_response, _flag = nn.chat(_asser)
 
 				if _flag == "--google-approval":
 					_wiki = t.wiki(question)
 				else:
 					mem.data_entry(question, _asser)
-					print("i will remember that")
+					tts.speak("i will remember that")
 
 			else:
-				print(ans)
+				tts.speak(ans)
 
-
+        elif flag =='--news':
+            num_headlines = input('number of headlines: ')
+            n_list = t.news(num_headlines)
+            for n in n_list:
+                tts.speak(n)
+                
 		elif flag == '--info':
 			#should be google, but for now use wiki
 			
